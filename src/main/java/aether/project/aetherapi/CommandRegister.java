@@ -44,14 +44,10 @@ public class CommandRegister extends Command implements PluginIdentifiableComman
 
     public static void reg(CommandExecutor executor) {
         try {
-            //CommandRegister reg = new CommandRegister(aliases, desc, usage, executor, new Object(), plugin);
-            Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-            field.setAccessible(true);
-            CommandMap map = (CommandMap) field.get(Bukkit.getServer());
             if (executor.getClass().isAnnotationPresent(CommandReg.class)) {
                 CommandReg commandInfo = executor.getClass().getAnnotation(CommandReg.class);
                 CommandRegister reg = new CommandRegister(commandInfo.aliases(), commandInfo.desc(), commandInfo.usage(), executor, new Object());
-                map.register("AetherProject", reg);
+                Bukkit.getCommandMap().register("AetherProject", reg);
             }
         } catch (Exception e) {
             e.printStackTrace();

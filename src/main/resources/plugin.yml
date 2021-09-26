@@ -1,0 +1,5 @@
+main: aether.project.aetherapi.Main
+name: "AetherAPI"
+version: 0.0.1
+description: "Aether API for all plugins which made by Aether Developers"
+api-version: 1.15

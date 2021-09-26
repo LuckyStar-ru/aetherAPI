@@ -38,9 +38,7 @@ public abstract class Menu implements InventoryHolder {
     }
 
     public void open(Player player) {
-        if (inventory.getContents().length == 0)
-            setContents();
-
+        setContents();
         player.openInventory(this.inventory);
     }
 
@@ -68,6 +66,7 @@ public abstract class Menu implements InventoryHolder {
         ItemMeta meta = airItem.getItemMeta();
         meta.setDisplayName("");
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        airItem.setItemMeta(meta);
         Arrays.fill(inventory.getContents(), airItem);
     }
 
@@ -76,6 +75,7 @@ public abstract class Menu implements InventoryHolder {
         ItemMeta meta = airItem.getItemMeta();
         meta.setDisplayName("");
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        airItem.setItemMeta(meta);
         ItemStack[] content = inventory.getContents();
         for (int i = 0; i < content.length; i++) {
             if (content[i].getType() != Material.AIR) {

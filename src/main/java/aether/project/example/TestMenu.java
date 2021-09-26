@@ -14,7 +14,7 @@ public class TestMenu extends Menu {
 
     @Override
     public void setContents() {
-        fillInventory(Material.BLACK_STAINED_GLASS);
+        fillInventory(Material.BLACK_STAINED_GLASS_PANE);
         ItemStackWrapper item = new ItemStackWrapper(Material.RED_WOOL);
         item.getMeta().setDisplayName("Привет! Ты заглянул в тестовое меню!");
         item.getItem().setLore(Arrays.asList("§7По нажатию в чате появится сообщение:", "§aМолодец!"));
