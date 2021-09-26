@@ -1,0 +1,46 @@
+image: maven:3.6.1-alpine
+
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode -s settings.xml"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+cache:
+  paths:
+    - .m2/repository/
+
+stages:
+  - build
+  - deploy
+  - notification
+
+.notification_setup: &notification_setup
+  - apk add --update git curl
+  - wget https://gitlab.com/dmytro_demontazz/gitlab-ci-discord-webhook/-/raw/master/send.sh
+  - chmod +x send.sh
+
+build:
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS versions:set -DnewVersion=$CI_PIPELINE_IID
+    - mvn $MAVEN_CLI_OPTS package
+    - *notification_setup
+    - /bin/ash ./send.sh success $WEBHOOK_URL
+  artifacts:
+    paths:
+      - target/*.jar
+
+failure_notification:
+  image: alpine:latest
+  stage: notification
+  script:
+    - *notification_setup
+    - /bin/ash ./send.sh failure $WEBHOOK_URL
+  when: on_failure
+
+deploy:
+  stage: deploy
+  only:
+    - tags
+  script:
+    - mvn $MAVEN_CLI_OPTS versions:set -DnewVersion=$CI_COMMIT_TAG
+    - mvn $MAVEN_CLI_OPTS deploy
